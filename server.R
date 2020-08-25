@@ -136,18 +136,6 @@ makeMap <- function (addressList){
 
 ###################
 shinyServer( function(input, output) {
-        output$ofrom <- renderText({
-                mapObject()[["mapData"]][1,"found"]
-        })
-        output$oto <- renderText({
-                mapObject()[["mapData"]][2,"found"]
-        })
-        x1 <- eventReactive(input$goButton,{
-                paste("Button was clicked",input$goButton, input$from, input$to)
-        })
-        output$text3 <- renderText({
-                x1()
-        })
         mapObject <- eventReactive(input$keyPressed,{
                 addressList<-data.frame(address=c(input$from,input$to), 
                                         type=factor(c("Origin", "Destination")))
@@ -156,5 +144,31 @@ shinyServer( function(input, output) {
         
         output$theMap <- renderLeaflet({
                 mapObject()[["myMap"]]
+        })
+        
+        output$foundFrom <- renderText({
+                mapObject()[["mapData"]][1,"found"]
+        })
+        output$foundTo <- renderText({
+                mapObject()[["mapData"]][2,"found"]
+        })
+        
+        autoInvalidate <- reactiveTimer(1000)
+        
+        currentTime <- reactive({
+                autoInvalidate()
+                now()
+        })
+        
+        output$fromTime <- renderText({
+                as.character(with_tz(currentTime(),mapObject()[["mapData"]][1,"TZone"]))
+        })
+        
+        output$toTime <- renderText({
+                as.character(with_tz(currentTime(),mapObject()[["mapData"]][2,"TZone"]))
+        })
+        
+        output$timeDifference <- renderText({
+                paste("Adjust your Clock",abs(mapObject()[["mapData"]][2,"tDiff"]),ifelse(mapObject()[["mapData"]][2,"tDiff"]<0,"hours back","hours forward"),"at your destination")
         })
 })
