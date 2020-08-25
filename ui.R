@@ -35,7 +35,8 @@ shinyUI(
                         tags$b("To:"),
                         textOutput("foundTo"),
                         textOutput("toTime"),
-                        textOutput("timeDifference"),
+                        htmlOutput("timeDifferenceHTML"),
+                        textOutput("distanceTraveled"),
                         hr(),
                         tags$footer("Timezone data provided by www.geonames.org/"),
                         tags$footer("Location data provided by openstreetmap.org")

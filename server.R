@@ -94,7 +94,7 @@ makeMap <- function (addressList){
                         "<br>Lng: ", mapData$lng,
                         "Lat:", mapData$lat,
                         "<br>Time Zone:",mapData$TZone,
-                        "<br>Adjust Clock:",abs(mapData$tDiff),ifelse(mapData$tDiff<0,"hours back","hours forward")
+                        "<br>Adjust watch:",abs(mapData$tDiff),ifelse(mapData$tDiff<0,"hours back","hours forward")
                 )
                 )
         domain <- range(as.numeric(mapData$type))
@@ -168,7 +168,11 @@ shinyServer( function(input, output) {
                 as.character(with_tz(currentTime(),mapObject()[["mapData"]][2,"TZone"]))
         })
         
-        output$timeDifference <- renderText({
-                paste("Adjust your Clock",abs(mapObject()[["mapData"]][2,"tDiff"]),ifelse(mapObject()[["mapData"]][2,"tDiff"]<0,"hours back","hours forward"),"at your destination")
+        output$timeDifferenceHTML <- renderText({
+                paste("<b>Adjust your watch",abs(mapObject()[["mapData"]][2,"tDiff"]),ifelse(mapObject()[["mapData"]][2,"tDiff"]<0,"hours back","hours forward"),"at your destination</b>")
+        })
+        
+        output$distanceTraveled <- renderText({
+                paste("You will travel",round(mapObject()[["mapData"]][2,"distance"],1),"kilometers")
         })
 })
