@@ -1,0 +1,45 @@
+Distance / Time-Zone Calculator
+========================================================
+author: Carlos Schuler
+date: 25 Aug 2020
+autosize: false
+
+I want to know ...
+========================================================
+type: exclaim
+
+- What time/day is it in Sydney/Australia right now?
+- Are they awake now?
+- How far is it?
+- What time do I need to set my watch to if I travel there?
+
+A very simple looking App!
+========================================================
+
+The [App](https://schulercar.shinyapps.io/Shiny-Application-and-Reproducible-Pitch/) is Self-explanatory and Easy to use!
+
+![](./AppImage.jpg)
+
+... with quite a bit behind it!
+========================================================
+
+Uses json to querry:
+
+- [OpenStreetMap](openstreetmap.org) for [geocoding](https://wiki.openstreetmap.org/wiki/Nominatim) information
+- [Geonames](geonames.org) for [Time Zone](https://www.timeanddate.com/time/map/) information
+
+```{r}
+address <- "Caracas, Venezuela"
+d <- jsonlite::fromJSON( 
+gsub("\\@addr\\@", 
+gsub("\\s+", "\\%20", address), 
+"http://nominatim.openstreetmap.org/search/@addr@?format=json&addressdetails=0&limit=1"))
+cat(paste("lat:",d$lat, ", lon:",d$lon))
+```
+
+Under the hood
+========================================================
+
+- [Javascript](https://www.javascript.com) to generate events upon hiting the <return> key
+- [Reactive Timer](https://shiny.rstudio.com/reference/shiny/0.14/reactiveTimer.html) to update time display at origin and destination every second
+
